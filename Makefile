@@ -15,7 +15,7 @@ INC_CL	=	GPS.h Network.h JvTime.h Person.h Thing.h IOT_Thing.h Shadow_Thing.h Co
 OBJ	=	GPS.o Network.o JvTime.o Person.o Thing.o IOT_Thing.o Shadow_Thing.o Core.o
 
 # rules.
-all: 	hw5server hw5client
+all: 	hw5server hw5client hw5another
 
 #
 #
@@ -33,6 +33,9 @@ hw5client.o:		hw5client.cpp hw5client.h $(INC_CL) $(INC)
 
 hw5server.o:		hw5server.cpp hw5server.h $(INC_CL) $(INC)
 	$(CC) -c $(CFLAGS) hw5server.cpp
+
+hw5another.o:		hw5another.cpp hw5server.h $(INC_CL) $(INC)
+	$(CC) -c $(CFLAGS) hw5another.cpp
 
 ecs36b_JSON.o:		ecs36b_JSON.cpp $(INC)
 	$(CC) -c $(CFLAGS) ecs36b_JSON.cpp
@@ -60,6 +63,9 @@ Thing.o:	Thing.cpp Thing.h $(INC)
 
 IOT_Thing.o:	IOT_Thing.cpp IOT_Thing.h Network.h $(INC)
 	$(CC) -c $(CFLAGS) IOT_Thing.cpp
+
+hw5another:	Shadow_Thing.o hw5another.o ecs36b_JSON.o $(OBJ)
+	$(CC) -o hw5another hw5another.o ecs36b_JSON.o $(OBJ) $(LDFLAGS)
 
 hw5server:	Shadow_Thing.o hw5server.o ecs36b_JSON.o $(OBJ)
 	$(CC) -o hw5server hw5server.o ecs36b_JSON.o $(OBJ) $(LDFLAGS)

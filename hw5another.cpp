@@ -68,7 +68,6 @@ Myhw5Server::move
   Json::Value result;
   std::string strJson;
 
-  std::cout << "Move\n";
   if (class_id != "Person")
     {
       result["status"] = "failed";
@@ -108,12 +107,12 @@ Myhw5Server::move
     {
       incoming_location.JSON2Object(location);
       if (!(process_here == incoming_location))
-       {
-        result["status"] = "failed";
-        strJson = ( "location mismatched" );
-        result["reason"] = strJson;
-        error_code = -5;
-       }
+	{
+	  result["status"] = "failed";
+	  strJson = ( "location mismatched" );
+	  result["reason"] = strJson;
+	  error_code = -5;
+	}
       else
 	{
 	  Person * lv_person_ptr;
@@ -127,22 +126,6 @@ Myhw5Server::move
 	      Person_Map[object_id] = lv_person_ptr;
 	    }
 	  lv_person_ptr->JSON2Object(json_object);
-
-	  // originally from hw5client.cpp
-	  HttpClient httpclient("http://127.0.0.1:7375");
-	  hw5Client myClient(httpclient, JSONRPC_CLIENT_V2);
-	  Json::Value myv;
-
-	  try {
-	    GPS_DD gps_Home_Woodland { 38.672215864622636, -121.72280111121437 };
-	    myv = myClient.move("move", "Person",
-				lv_person_ptr->dump2JSON(),
-				gps_Home_Woodland.dump2JSON(),
-				"987654321");
-	  } catch (JsonRpcException &e) {
-	    cerr << e.what() << endl;
-	  }
-	  std::cout << myv.toStyledString() << std::endl;
 	  result["status"] = "successful";
 	}
     }
@@ -241,7 +224,7 @@ int main()
   GPS_DD gps_IKEA_Sacramento { 38.58681641563053, -121.55296296578501};
 
   // set location here
-  process_here = gps_TLC_UCDavis; // server, forrest
+  process_here = gps_Home_Woodland; // another, grandma
   
   Person Felix { "987654321", "Felix", gps_Home_Woodland };
   Felix.setLocation(gps_IKEA_Sacramento, (*getNowJvTime()));
@@ -301,7 +284,7 @@ int main()
 
 #endif /* _GPS_STUFF_ */
   
-  HttpServer httpserver(7374);
+  HttpServer httpserver(7375);
   Myhw5Server s(httpserver,
 		JSONRPC_SERVER_V1V2); // hybrid server (json-rpc 1.0 & 2.0)
   s.StartListening();

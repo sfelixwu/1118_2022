@@ -21,8 +21,8 @@ main()
   Thing *thing_ptr;
   
   // first object
-  // Shadow_Thing st_1 { "http://10.42.0.1:8384", "Thing", "00000001" };
-  Shadow_Thing st_1 { "http://127.0.0.1:8384", "Thing", "00000002" };
+  // Shadow_Thing st_1 { "http://10.42.0.1:7374", "Thing", "00000001" };
+  // Shadow_Thing st_1 { "http://127.0.0.1:7374", "Thing", "00000001" };
 
   // second object
   GPS_DD gps_Home_Woodland { 38.672215864622636, -121.72280111121437 };
@@ -33,21 +33,24 @@ main()
   John.setLocation(gps_IKEA_Sacramento, (*getNowJvTime()));
 
   // object mobility demo for 11/18/2022 and 11/21/2022
-  HttpClient httpclient("http://127.0.0.1:8384");
+  HttpClient httpclient("http://127.0.0.1:7374");
   hw5Client myClient(httpclient, JSONRPC_CLIENT_V2);
   Json::Value myv;
 
   // move
   try {
     myv = myClient.move("move", "Person",
-			(John.dump2JSON()).toStyledString(),
-			(gps_TLC_UCDavis.dump2JSON()).toStyledString(),
+			John.dump2JSON(),
+			gps_TLC_UCDavis.dump2JSON(),
 			"987654321");
     } catch (JsonRpcException &e) {
     cerr << e.what() << endl;
   }
   std::cout << myv.toStyledString() << std::endl;
 
+  exit(-2);
+  Shadow_Thing st_1 { "http://127.0.0.1:7374", "Thing", "00000001" };
+  
   // search
   try {
     myv = myClient.search("search", "Person",
